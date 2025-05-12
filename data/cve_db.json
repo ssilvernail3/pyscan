@@ -1,0 +1,16 @@
+[
+    {
+      "product": "SimpleHTTP",
+      "version": "0.6",
+      "cve": "CVE-2022-23943",
+      "description": "SimpleHTTPServer 0.6 allows directory traversal via crafted URLs.",
+      "severity": "Medium"
+    },
+    {
+      "product": "Apache",
+      "version": "2.4.49",
+      "cve": "CVE-2021-41773",
+      "description": "Apache 2.4.49 allows a path traversal attack.",
+      "severity": "High"
+    }
+  ]

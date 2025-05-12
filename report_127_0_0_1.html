@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Scan Report - 127.0.0.1</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; background: #f4f4f4; color: #333; }
+        h1 { color: #444; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; border: 1px solid #ccc; text-align: left; }
+        th { background: #eee; }
+        .vuln { color: red; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>Scan Report</h1>
+    <p><strong>Target:</strong> 127.0.0.1</p>
+    <p><strong>Total Open Ports:</strong> 1</p>
+
+    <table>
+        <tr>
+            <th>Port</th>
+            <th>Banner</th>
+            <th>Vulnerabilities</th>
+        </tr>
+        
+        <tr>
+            <td>8080</td>
+            <td>HTTP/1.0 200 OK Server: SimpleHTTP/0.6 Python/3.9.10 Date: Mon, 12 May 2025 17:09:11 GMT Content-type: text/html; charset=utf-8 Content-Length: 504</td>
+            <td>
+                
+                    
+                        <div class="vuln">[CVE-2022-23943] SimpleHTTPServer 0.6 allows directory traversal via crafted URLs. (Medium)</div>
+                    
+                
+            </td>
+        </tr>
+        
+    </table>
+</body>
+</html>
