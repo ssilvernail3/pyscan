@@ -1,8 +1,15 @@
 # 🔍 PyScan - Lightweight Python Vulnerability Scanner
 
-PyScan is a simple, Python-based vulnerability scanner designed to scan a target IP address for open ports, identify running services, detect known vulnerabilities, and generate a clean HTML report.
+**PyScan** is a Python-based vulnerability scanner that scans a target IP for open ports, grabs banners to identify running services, matches against known CVEs, and outputs a clean HTML report.
 
-This project was built to demonstrate both software development and cybersecurity skills, including banner grabbing, CVE detection, and report generation.
+This is an in-progress cybersecurity project built to demonstrate both software engineering and security fundamentals — with more features actively in development.
+
+🚧 **Upcoming Enhancements:**
+- Multi-threaded port scanning
+- PDF and CSV report export
+- Shodan & NVD API integration
+- Flask-based web interface
+- CLI packaging for pip install
 
 ---
 
