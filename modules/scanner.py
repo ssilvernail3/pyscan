@@ -1,37 +1,55 @@
 import socket
+import threading
 
-def scan_ports(ip, ports, timeout=1):
+# Shared list for open ports
+open_ports = []
+lock = threading.Lock()
 
-    """ Scan a list of ports on a target IP address using TCP connection attempts.
+def scan_port(ip, port, timeout=1):
+    """
+    Scan a single port on a target IP address using a TCP connection.
 
     Args:
-        ip (str): The target IP address to scan.
-        ports (list): A list of integer port numbers to scan.
-        timeout (int): Timeout in seconds for each connection attempt.
+        ip (str): Target IP address.
+        port (int): Port number to scan.
+        timeout (int): Socket timeout in seconds.
+    """
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.settimeout(timeout)
+            result = s.connect_ex((ip, port))
+            if result == 0:
+                with lock:
+                    print(f"[+] Port {port} is OPEN")
+                    open_ports.append(port)
+    except Exception as e:
+        pass  # You can optionally log or print errors
+
+def scan_ports(ip, ports, timeout=1):
+    """
+    Scan multiple ports using threading.
+
+    Args:
+        ip (str): Target IP address.
+        ports (list): List of ports to scan.
+        timeout (int): Socket timeout in seconds.
 
     Returns:
-        list: A list of open ports that responded successfully. """
-    
+        list: Open ports detected on the target IP.
+    """
+    global open_ports
     open_ports = []
+
     print(f"\n[*] Scanning {ip} on ports: {ports}")
 
+    threads = []
+
     for port in ports:
-        try:
+        t = threading.Thread(target=scan_port, args=(ip, port, timeout))
+        threads.append(t)
+        t.start()
 
-            # Create a TCP socket
+    for t in threads:
+        t.join()
 
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                # Set timeout so it doesn't hang too long per port
-                s.settimeout(timeout)
-
-                # Attempt to connect to the target port
-                result = s.connect_ex((ip, port))
-                
-                # connect_ex returns 0 if the port is open
-                if result == 0:
-                    print (f"[+] Port {port} is OPEN")
-                    open_ports.append(port)
-        except Exception as e:
-            # Catch any errors and print them (i.e., invalid IP)
-            print(f"[!] Error scanning port {port}: {e}")
-    return open_ports               
+    return open_ports

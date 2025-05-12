@@ -1,33 +1,48 @@
 from jinja2 import Environment, FileSystemLoader
+from weasyprint import HTML
 import os
 
 def generate_report(target, results, format="html"):
-
     """
-    Generate an HTML report of the scan results using a Jinja2 template.
+    Generate a scan report in either HTML or PDF format.
 
     Args:
         target (str): The IP address that was scanned.
-        results (list): A list of dictionaries with keys: port, banner, and vulns.
-        format (str): Report format ("html" currently supported).
+        results (list): A list of dictionaries with keys: port, banner, vulns.
+        format (str): 'html' or 'pdf'.
 
     Returns:
         None
     """
-    # Set up Jinja2 to load templates from the 'templates/' folder
+    # Set up Jinja2 templating environment
     env = Environment(loader=FileSystemLoader("templates"))
-    
-    #Load the report HTML template
     template = env.get_template("report_template.html")
 
-    # Render teh template from your scan data
-    output = template.render(target=target, results=results)
+    # Render the report content
+    rendered = template.render(target=target, results=results)
 
-    #Format the filename safely (replace . with _)
-    output_path = f"report_{target.replace('.', '_')}.html"
-    
-    # Save the rendered HTML to a file
-    with open(output_path, "w") as f:
-        f.write(output)
+    # File name base
+    filename = f"report_{target.replace('.', '_')}"
 
-    print(f"\n[✓] Report saved to {output_path}")
+    # HTML output
+    if format == "html":
+        html_path = f"{filename}.html"
+        with open(html_path, "w") as f:
+            f.write(rendered)
+        print(f"\n[✓] HTML report saved to {html_path}")
+
+    # PDF output
+    elif format == "pdf":
+        html_path = f"{filename}.html"
+        pdf_path = f"{filename}.pdf"
+
+        # Save HTML first (used for conversion)
+        with open(html_path, "w") as f:
+            f.write(rendered)
+
+        # Convert to PDF using WeasyPrint
+        HTML(html_path).write_pdf(pdf_path)
+        print(f"\n[✓] PDF report saved to {pdf_path}")
+
+    else:
+        print("[!] Unsupported report format. Please choose 'html' or 'pdf'.")
